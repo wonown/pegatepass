@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Outpass Management System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Notification Bell and Panel (static, fixed, top right below search bar, badge beside bell) -->
+<div id="notifBellWrapper">
+  <div id="notifBell" onclick="toggleNotificationPanel()">
+    <i class="fas fa-bell"></i>
+    <span id="notifBadge"></span>
+  </div>
+</div>
+<div id="notificationPanel">
+  <div class="notif-header">
+    <i class="fas fa-bell"></i>
+    New Outpass Requests
+    <button class="notif-close" onclick="closeNotificationPanel()" title="Dismiss">&times;</button>
+  </div>
+  <ul id="notifList"></ul>
+</div>
+
+<!-- Search Bar -->
+<div class="search-container">
+  <input type="text" id="searchInput" oninput="handleSearchInput()" />
+  <div id="adminDropdown" class="hidden">
+    <select onchange="openAdminModal(this.value)">
+      <option value="">Select Admin Role</option>
+      <option value="hr">HR/ADMIN</option>
+      <option value="ceo">CEO</option>
+      <option value="saleshead">Sales Head</option>
+      <option value="accountshead">Accounts Head</option>
+      <option value="sectionhead">Section Head</option>
+    </select>
+  </div>
+</div>
+
+<!-- Outpass Form -->
+<div class="form-container" id="outpassForm">
+  <h2>GET YOUR OUT-PASS</h2>
+  <div class="field"><label>Domain</label>
+    <select id="domain">
+      <option value="">-- Select --</option>
+      <option>PRIYANKA ENTERPRISES</option>
+      <option>CLARION FARMING</option>
+      <option>CLARION INNOVATIONS</option>
+    </select>
+  </div>
+  <div class="field"><label>Name</label><input type="text" id="name"></div>
+  <div class="field"><label>Date</label><input type="date" id="date"></div>
+  <div class="field"><label>Out Time</label>
+    <div style="flex: 1; display:flex; gap:5px;">
+      <input type="time" id="outTime"><select id="outAmPm"><option>AM</option><option>PM</option></select>
+    </div>
+  </div>
+  <div class="field"><label>In Time Estd.</label>
+    <div style="flex: 1; display:flex; gap:5px;">
+      <input type="time" id="inTime"><select id="inAmPm"><option>AM</option><option>PM</option></select>
+    </div>
+  </div>
+  <div class="field"><label>Reason</label><textarea id="reason" rows="2"></textarea></div>
+  <div class="field"><label>Vehicle Used?</label>
+    <select id="vehicleUsed" onchange="toggleVehicleFields(this.value)">
+      <option value="">-- Select --</option>
+      <option>No</option>
+      <option>Yes</option>
+    </select>
+  </div>
+  <div id="vehicleFields" class="hidden">
+    <div class="field"><label>Vehicle No</label><input type="text" id="vehicleNo"></div>
+    <div class="field"><label>Reading Out</label><input type="number" id="readingOut"></div>
+    <div class="field"><label>Reading In</label><input type="number" id="readingIn"></div>
+  </div>
+  <div class="field"><label>Request to</label>
+    <select id="authority">
+      <option value="">-- Select --</option>
+      <option value="hr">HR/ADMIN</option>
+      <option value="ceo">C.E.O</option>
+      <option value="saleshead">Sales Head</option>
+      <option value="accountshead">Accounts Head</option>
+      <option value="sectionhead">Section Head</option>
+    </select>
+  </div>
+  <button class="send-button" onclick="submitForm()">SEND</button>
+</div>
+
+<!-- Home Page Outpass Record Table (Visible to everyone) -->
+<div id="homeRecordTable">
+  <h2>Outpass Requests</h2>
+  <button class="pdf-icon-button" onclick="downloadPDFHome()" title="Download PDF"><i class="fas fa-arrow-down"></i></button>
+  <div class="home-search-bar">
+    <input type="text" id="homeTableSearchInput" placeholder="Search requests..." />
+  </div>
+  <div id="homePdfContent">
+    <table id="homeDataTable">
+      <thead>
+        <tr>
+          <th>Domain</th><th>Name</th><th>Date</th><th>Out Time</th><th>In Time</th><th>Reason</th>
+          <th>Vehicle Used</th><th>Vehicle No</th><th>Reading Out</th><th>Reading In</th><th>Authority</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Admin Modal -->
+<div id="adminLoginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeAdminLogin()">&times;</span>
+    <h3>Admin Login</h3>
+    <label>Username:</label><input type="text" id="adminSelect" autocomplete="off"><br><br>
+    <label>Password:</label><input type="password" id="adminPassword" autocomplete="off"><br><br>
+    <button onclick="loginAdmin()">Login</button>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" class="hidden">
+  <h2>Submitted Outpass Records</h2>
+  <button class="pdf-icon-button" onclick="downloadPDF()" title="Download PDF"><i class="fas fa-arrow-down"></i></button>
+  <button class="send-button logout-red" onclick="logout()">Logout</button>
+  <div id="pdfContent">
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>Domain</th><th>Name</th><th>Date</th><th>Out Time</th><th>In Time</th><th>Reason</th>
+          <th>Vehicle Used</th><th>Vehicle No</th><th>Reading Out</th><th>Reading In</th><th>Authority</th><th>Approve</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
